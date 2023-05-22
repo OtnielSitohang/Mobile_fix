@@ -1,16 +1,14 @@
 // import 'dart:developer';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gofid_mobile_fix/Bloc/app/app_bloc.dart';
 import 'package:gofid_mobile_fix/Models/login_user.dart';
 import 'package:gofid_mobile_fix/Bloc/login/form_submission_status.dart';
 import 'package:gofid_mobile_fix/Bloc/login/login_bloc.dart';
-import 'package:gofid_mobile_fix/Bloc/login/login_bloc.dart';
-import 'package:gofid_mobile_fix/Pages/Public/public_page.dart';
 import 'package:gofid_mobile_fix/Components/component.dart';
-import 'package:gofid_mobile_fix/Public/public_page.dart';
-
-// import 'package:mobile_app_gofit_0541/Components/component.dart';
+import 'package:gofid_mobile_fix/Models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -91,22 +89,24 @@ class UsernameField extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
-          //* enable jika tidak lagi proses submitting
-          enabled: state.formStatus is! FormSubmitting?,
-          //* Styling
-          decoration: const InputDecoration(
-            icon: Icon(Icons.person),
-            hintText: 'Username /ID Member',
-            labelText: 'Name',
-          ), //*akhir dari styling
-          //* validator (cek state)
-          validator: (value) =>
-              state.isValidUsername ? null : 'Username tidak boleh kosong',
-          //* setiap perubahan add event
-          onChanged: (value) => context
-              .read<LoginBloc>()
-              .add(LoginUsernameChanged(EMAIL_USER: value)),
-        );
+            //* enable jika tidak lagi proses submitting
+            enabled: state.formStatus is! FormSubmitting?,
+            //* Styling
+            decoration: const InputDecoration(
+              icon: Icon(Icons.person),
+              hintText: 'Username /ID Member',
+              labelText: 'Name',
+            ), //*akhir dari styling
+            //* validator (cek state)
+            validator: (value) =>
+                state.isValidUsername ? null : 'Username tidak boleh kosong',
+            //* setiap perubahan add event
+            onChanged: (bebek) {
+              inspect(bebek);
+              context
+                  .read<LoginBloc>()
+                  .add(LoginUsernameChanged(EMAIL_USER: bebek));
+            });
       },
     );
   }
@@ -171,19 +171,14 @@ class LoginButton extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, loginState) {
         if (loginState.formStatus is SubmissionSuccess) {
-          context.read<AppBloc>().add(SaveUserInfo(
-                user: loginState.user != null ? loginState.user! : null,
-                instruktur: loginState.instruktur,
-                member: loginState.member,
-              ));
-
-          final user = loginState.user;
-          if (user != null) {
-            if (user.ID_MEMBER != null) {
+          inspect('ngga listen');
+          inspect(loginState.user);
+          if (loginState.user != null) {
+            if (loginState.user?.ID_MEMBER != null) {
               Navigator.pushReplacementNamed(context, '/homeMember');
-            } else if (user.ID_PEGAWAI != null) {
+            } else if (loginState.user!.ID_PEGAWAI != null) {
               Navigator.pushReplacementNamed(context, '/homePegawai');
-            } else if (user.ID_INSTRUKTUR != null) {
+            } else if (loginState.user!.ID_INSTRUKTUR != null) {
               Navigator.pushReplacementNamed(context, '/homeInstruktur');
             }
           }

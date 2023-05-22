@@ -27,11 +27,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   //* Mencatat perubahan pada form email
   _onEmailChanged(LoginUsernameChanged event, Emitter<LoginState> emit) {
-    emit(state.copyWith(EMAIL_USER: event.EMAIL_USER));
+      emit(state.copyWith(EMAIL_USER: event.EMAIL_USER));
   }
 
   //* Mencatat perubahan pada form password
-  _onPasswordChanged(LoginPasswordChanged event, Emitter<LoginState> emit) {
+  _onPasswordChanged(LoginPasswordChanged event, Emitter<LoginState> emit) {  
     emit(state.copyWith(PASSWORD_USER: event.PASSWORD_USER));
   }
 
@@ -44,18 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final response = await authRepo.login(
           EMAIL_USER: state.EMAIL_USER, PASSWORD_USER: state.PASSWORD_USER);
       if (response != null) {
-        emit(state.copyWith(user: response.user));
-        (response.instruktur != null)
-            ? emit(state.copyWith(instruktur: response.instruktur))
-            : '';
-        (response.member != null)
-            ? emit(state.copyWith(member: response.member))
-            : '';
-        (response.pegawai != null)
-            ? emit(state.copyWith(member: response.member))
-            : '';
-
-        emit(state.copyWith(user: response.user));
+        emit(state.copyWith(user: response));
         emit(state.copyWith(formStatus: SubmissionSuccess()));
       } else {
         return emit(state.copyWith(formStatus: SubmissionFailed()));

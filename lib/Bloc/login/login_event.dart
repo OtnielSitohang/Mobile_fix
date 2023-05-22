@@ -16,7 +16,11 @@ class LoginPasswordChanged extends LoginEvent {
   LoginPasswordChanged({this.PASSWORD_USER});
 }
 
-class LoginSubmitted extends LoginEvent {}
+class LoginSubmitted extends LoginEvent {
+  final User? user;
+
+  LoginSubmitted({this.user});
+}
 
 class Logout extends LoginEvent {
   final String? EMAIL_USER;
