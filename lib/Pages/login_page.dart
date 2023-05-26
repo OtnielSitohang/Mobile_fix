@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gofid_mobile_fix/Bloc/app/app_bloc.dart';
-import 'package:gofid_mobile_fix/Models/login_user.dart';
 import 'package:gofid_mobile_fix/Bloc/login/form_submission_status.dart';
 import 'package:gofid_mobile_fix/Bloc/login/login_bloc.dart';
 import 'package:gofid_mobile_fix/Components/component.dart';
@@ -18,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  LoginResult? loginResult;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -101,11 +99,10 @@ class UsernameField extends StatelessWidget {
             validator: (value) =>
                 state.isValidUsername ? null : 'Username tidak boleh kosong',
             //* setiap perubahan add event
-            onChanged: (bebek) {
-              inspect(bebek);
+            onChanged: (value) {
               context
                   .read<LoginBloc>()
-                  .add(LoginUsernameChanged(EMAIL_USER: bebek));
+                  .add(LoginUsernameChanged(EMAIL_USER: value));
             });
       },
     );
@@ -171,8 +168,7 @@ class LoginButton extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, loginState) {
         if (loginState.formStatus is SubmissionSuccess) {
-          inspect('ngga listen');
-          inspect(loginState.user);
+          inspect(loginState);
           if (loginState.user != null) {
             if (loginState.user?.ID_MEMBER != null) {
               Navigator.pushReplacementNamed(context, '/homeMember');

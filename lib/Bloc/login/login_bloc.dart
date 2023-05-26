@@ -27,11 +27,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   //* Mencatat perubahan pada form email
   _onEmailChanged(LoginUsernameChanged event, Emitter<LoginState> emit) {
-      emit(state.copyWith(EMAIL_USER: event.EMAIL_USER));
+    emit(state.copyWith(EMAIL_USER: event.EMAIL_USER));
   }
 
   //* Mencatat perubahan pada form password
-  _onPasswordChanged(LoginPasswordChanged event, Emitter<LoginState> emit) {  
+  _onPasswordChanged(LoginPasswordChanged event, Emitter<LoginState> emit) {
     emit(state.copyWith(PASSWORD_USER: event.PASSWORD_USER));
   }
 
@@ -56,8 +56,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
   //* Akhir dari fungsi tombol submit
 
-  //* saat logout , hapus data username dan password dari state
+  // * saat logout , hapus data username dan password dari state
+  // _onLogoutSubmitted(Logout event, Emitter<LoginState> emit) {
+  //   emit(state.copyWith(
+  //     EMAIL_USER: '',
+  //     PASSWORD_USER: '',
+  //   ));
+  // }
+
   _onLogoutSubmitted(Logout event, Emitter<LoginState> emit) {
-    emit(state.copyWith(EMAIL_USER: '', PASSWORD_USER: ''));
+    emit(LoginState()); // Mengatur ulang state menjadi state awal
   }
 }

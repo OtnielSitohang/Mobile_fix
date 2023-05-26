@@ -6,6 +6,9 @@ class Member {
   String? ALAMAT_MEMBER;
   String? TELEPON_MEMBER;
   String? SISA_DEPOSIT_MEMBER;
+  String? TANGGAL_KADALUARSA_MEMBERSHIP;
+  String? TANGGAL_LAHIR_USER;
+  String? TOTAL_KELAS;
   String? IS_DELETED_MEMBER;
 
   Member({
@@ -14,6 +17,8 @@ class Member {
     this.ALAMAT_MEMBER,
     this.TELEPON_MEMBER,
     this.SISA_DEPOSIT_MEMBER,
+    this.TANGGAL_LAHIR_USER,
+    this.TOTAL_KELAS,
     this.IS_DELETED_MEMBER,
   });
 
@@ -24,7 +29,9 @@ class Member {
       ALAMAT_MEMBER: json['ALAMAT_MEMBER']?.toString() ?? '',
       TELEPON_MEMBER: json['TELEPON_MEMBER']?.toString() ?? '',
       SISA_DEPOSIT_MEMBER: json['SISA_DEPOSIT_MEMBER']?.toString() ?? '',
+      TANGGAL_LAHIR_USER: json['TANGGAL_LAHIR_USER']?.toString() ?? '',
       IS_DELETED_MEMBER: json['IS_DELETED_MEMBER']?.toString() ?? '',
+      TOTAL_KELAS: json['TOTAL_KELAS']?.toString() ?? '',
     );
   }
 }

@@ -1,5 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 // ignore: camel_case_types
+// import 'mo';
+
+import 'package:gofid_mobile_fix/Models/kelas.dart';
 
 class User {
   final String ID_USER;
@@ -11,8 +14,23 @@ class User {
   final String TANGGAL_LAHIR_USER;
   final String IS_DELETED_USER;
 
+  //Instruktur
+  final String? DESKRIPSI_INSTRUKTUR;
+  final String? KETERLAMBATAN_INSTRUKTUR;
+  //Pegawai
   final String? ID_PEGAWAI;
+  //Meber
   final String? ID_MEMBER;
+  final String? ALAMAT_MEMBER;
+  final String? TELEPON_MEMBER;
+  final String? SISA_DEPOSIT_MEMBER;
+  final String? TANGGAL_KADALUARSA_MEMBERSHIP;
+  final String? TOTAL_KELAS;
+  final String? ID_KELAS;
+
+  Kelas? kelas;
+
+  //Instruktur
   final String? ID_INSTRUKTUR;
 
   User({
@@ -24,8 +42,21 @@ class User {
     required this.PASSWORD_USER,
     required this.TANGGAL_LAHIR_USER,
     required this.IS_DELETED_USER,
-    this.ID_PEGAWAI,
     this.ID_MEMBER,
+    this.ALAMAT_MEMBER,
+    this.TANGGAL_KADALUARSA_MEMBERSHIP,
+    this.TELEPON_MEMBER,
+    this.SISA_DEPOSIT_MEMBER,
+    this.TOTAL_KELAS,
+    this.ID_KELAS,
+    this.kelas,
+
+    //Instruktur
+    this.DESKRIPSI_INSTRUKTUR,
+    this.KETERLAMBATAN_INSTRUKTUR,
+
+    //Pegawai
+    this.ID_PEGAWAI,
     this.ID_INSTRUKTUR,
   });
 
@@ -41,7 +72,19 @@ class User {
       IS_DELETED_USER: json['IS_DELETED_USER']?.toString() ?? '',
       ID_PEGAWAI: json['ID_PEGAWAI']?.toString(),
       ID_MEMBER: json['ID_MEMBER']?.toString(),
+      ALAMAT_MEMBER: json['ALAMAT_MEMBER']?.toString(),
+      TELEPON_MEMBER: json['TELEPON_MEMBER']?.toString(),
+      TOTAL_KELAS: json['TOTAL_KELAS']?.toString(),
+      ID_KELAS: json['ID_KELAS ']?.toString(),
+      SISA_DEPOSIT_MEMBER: json['SISA_DEPOSIT_MEMBER']?.toString(),
+      TANGGAL_KADALUARSA_MEMBERSHIP:
+          json['TANGGAL_KADALUARSA_MEMBERSHIP']?.toString(),
+      kelas: Kelas.fromJson(json['kelas']),
+
+      //Instruktur
       ID_INSTRUKTUR: json['ID_INSTRUKTUR']?.toString(),
+      DESKRIPSI_INSTRUKTUR: json['DESKRIPSI_INSTRUKTUR']?.toString(),
+      KETERLAMBATAN_INSTRUKTUR: json['KETERLAMBATAN_INSTRUKTUR']?.toString(),
     );
   }
 }
