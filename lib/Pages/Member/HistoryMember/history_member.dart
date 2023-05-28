@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unused_import
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gofid_mobile_fix/Models/user.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:gofid_mobile_fix/Config/global.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gofid_mobile_fix/Bloc/app/app_bloc.dart';
+import 'package:gofid_mobile_fix/Bloc/login/login_bloc.dart';
 
 class HistoryPage extends StatefulWidget {
   @override
@@ -17,21 +22,25 @@ class HistoryPage extends StatefulWidget {
 class HistoryPageState extends State<HistoryPage> {
   List<dynamic> historyData = [];
   late String loggedInUserID; // ID_USER yang diambil dari login
+  late double _screenWidth = 0.0;
 
   @override
   void initState() {
     super.initState();
     loggedInUserID = getLoggedInUserID();
+    _screenWidth = 0.0; // Initialize _screenWidth here
     fetchHistoryData();
   }
 
   String getLoggedInUserID() {
-    // Ganti dengan cara Anda mendapatkan ID_USER dari LoginBloc
-    return '23.03.001';
+    String? ID_MEMBER =
+        BlocProvider.of<LoginBloc>(context).state.user?.ID_MEMBER;
+    return ID_MEMBER ?? '';
   }
 
   Future<void> fetchHistoryData() async {
     String apiUrl = '$url/indexHistoryMemberKelas/$loggedInUserID';
+    inspect(loggedInUserID);
     try {
       var response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
@@ -76,7 +85,8 @@ class HistoryPageState extends State<HistoryPage> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return HistoryDetailScreen(data: history);
+                    return HistoryDetailScreen(
+                        data: history, screenWidth: _screenWidth);
                   },
                 );
               },
@@ -130,8 +140,9 @@ class HistoryPageState extends State<HistoryPage> {
 
 class HistoryDetailScreen extends StatelessWidget {
   final dynamic data;
+  final double screenWidth;
 
-  HistoryDetailScreen({required this.data});
+  HistoryDetailScreen({required this.data, required this.screenWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -151,39 +162,39 @@ class HistoryDetailScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.all(16),
           child: Card(
             elevation: 4,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.w),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.w),
+                borderRadius: BorderRadius.circular(10),
                 gradient: LinearGradient(
                   colors: [Colors.blue.shade200, Colors.blue.shade400],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SvgPicture.asset(
-                        'assets/icons/history_icon.svg',
-                        width: 32.w,
-                        height: 32.w,
+                      Icon(
+                        Icons.history,
+                        weight: 32,
+                        size: 32,
                         color: Colors.blue,
                       ),
                       Flexible(
                         child: Text(
                           '#$idBooking',
                           style: TextStyle(
-                            fontSize: 24.sp,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -192,140 +203,133 @@ class HistoryDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 24),
                   Text(
                     'Nama Kelas',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
                     namaKelas,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(
                     'Nama Instruktur',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
                     namaInstruktur,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(
                     'ID Member',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
                     ID_MEMBER,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 16.h),
-                  Text(
-                    'Sesi Kelas',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    '$SESI_BOOKING_KELAS',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(
                     'Tanggal Booking',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
                     TANGGAL_BOOKING_KELAS,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(
                     'Tanggal Kelas',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
                     TANGGAL_KELAS,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(
                     'Presensi',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
-                    '$STATUS_PRESENSI',
+                    getPresensiText(STATUS_PRESENSI),
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(
-                    'Sesi',
+                    'Sesi Kelas',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
-                    '$SESI_JADWAL',
+                    GetSesiTetx(SESI_JADWAL),
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(
+                            context); // Navigate back to previous screen
+                      },
+                      child: Text('Kembali'),
                     ),
                   ),
                 ],
@@ -335,5 +339,35 @@ class HistoryDetailScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+String getPresensiText(int presensi) {
+  if (presensi == 0) {
+    return 'Belum Presensi';
+  } else if (presensi == 1) {
+    return 'Sudah Presensi';
+  } else if (presensi == 2) {
+    return 'Tidak Hadir';
+  } else {
+    return 'Status Presensi Tidak Valid';
+  }
+}
+
+String GetSesiTetx(int sesi) {
+  if (sesi == 0) {
+    return '06:00 - 08:00';
+  } else if (sesi == 1) {
+    return '08:00 - 10:00';
+  } else if (sesi == 2) {
+    return '10:00 - 12:00';
+  } else if (sesi == 3) {
+    return '12:00 - 14:00';
+  } else if (sesi == 4) {
+    return '14:00 - 16:00';
+  } else if (sesi == 5) {
+    return '18::00 - 20:00';
+  } else {
+    return '20:00 - 22:00';
   }
 }
