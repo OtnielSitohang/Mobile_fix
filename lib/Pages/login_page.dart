@@ -168,7 +168,7 @@ class LoginButton extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, loginState) {
         if (loginState.formStatus is SubmissionSuccess) {
-          inspect(loginState);
+          // inspect(loginState);
           if (loginState.user != null) {
             if (loginState.user?.ID_MEMBER != null) {
               Navigator.pushReplacementNamed(context, '/homeMember');

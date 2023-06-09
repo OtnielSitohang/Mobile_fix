@@ -209,10 +209,10 @@ Padding partTwo(LoginState state) {
             children: [
               ListTile(
                 title: Text(
-                  'Address',
+                  'Masa Berlaku',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(state.user?.ALAMAT_MEMBER ?? ''),
+                subtitle: Text(state.user?.TANGGAL_KADALUARSA_MEMBERSHIP ?? ''),
                 leading: Icon(Icons.home),
               ),
               ListTile(
@@ -274,9 +274,7 @@ Padding buildPartTree(LoginState state) {
                         ),
                       ),
                       Text(
-                        'Rp. ' +
-                            NumberFormat('#,##0', 'en_US').format(double.parse(
-                                state.user?.SISA_DEPOSIT_MEMBER ?? '')),
+                        'Rp. ' + (state.user?.SISA_DEPOSIT_MEMBER ?? '0'),
                         style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.w900,
@@ -355,8 +353,10 @@ Widget subDescription(String textTitle, textDescription, IconData ic) {
             ],
           ),
         ),
-        Text(textDescription,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text(
+          textDescription ?? '',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
       ],
     ),
   );

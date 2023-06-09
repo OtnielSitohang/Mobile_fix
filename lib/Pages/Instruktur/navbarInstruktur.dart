@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gofid_mobile_fix/Pages/Instruktur/history_instruktur.dart';
 import 'package:gofid_mobile_fix/Pages/Instruktur/indexInstruktur.dart';
 import 'package:gofid_mobile_fix/Pages/Instruktur/profileInstruktur.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -26,13 +27,13 @@ class _HomeInstrukturState extends State<HomeInstruktur> {
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.explore),
-            label: 'Booking',
+            label: 'Kelas',
           ),
-          // NavigationDestination(
-          //   selectedIcon: Icon(Icons.bookmark),
-          //   icon: Icon(Icons.bookmark_border),
-          //   label: 'Saved',
-          // ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.history),
+            icon: Icon(Icons.history),
+            label: 'Hisotry',
+          ),
           NavigationDestination(
             icon: Icon(Icons.people_alt_outlined),
             label: 'Profile',
@@ -41,6 +42,7 @@ class _HomeInstrukturState extends State<HomeInstruktur> {
       ),
       body: <Widget>[
         IndexInstruktur(),
+        HistoryInstruktur(),
         ProfileInstruktur(),
         Container(
           color: Colors.blue,

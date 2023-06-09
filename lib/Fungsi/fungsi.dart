@@ -22,8 +22,20 @@ String formatTanggal(String dateString) {
   }
 }
 
-String timeFormatHourMinute(String time) {
-  String afterFormat = 'mantap';
+String timeFormatHourMinute(int seconds) {
+  int hours = seconds ~/ 3600;
+  int minutes = (seconds % 3600) ~/ 60;
+  int remainingSeconds = (seconds % 60);
 
-  return afterFormat;
+  String formattedTime = '';
+
+  if (hours > 0) {
+    formattedTime += '${hours.toString()} jam ';
+  }
+  if (minutes > 0) {
+    formattedTime += '${minutes.toString()} menit ';
+  }
+  formattedTime += '${remainingSeconds.toString()} detik';
+
+  return formattedTime.trim();
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gofid_mobile_fix/Pages/Member/HistoryMember/history_member.dart';
+import 'package:gofid_mobile_fix/Pages/Member/HistoryMember/history_kelas_member.dart';
 import 'package:gofid_mobile_fix/Pages/Member/Profile/profile_member.dart';
 import 'package:gofid_mobile_fix/Pages/Member/index_member.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -42,7 +42,7 @@ class _HomeMemberState extends State<HomeMember> {
       ),
       body: <Widget>[
         IndexMember(),
-        HistoryPage(),
+        HistoryKelasPage(),
         ProfileMember(),
         Container(
           color: Colors.blue,

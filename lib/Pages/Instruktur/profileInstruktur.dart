@@ -171,36 +171,7 @@ class Avatar extends StatelessWidget {
   }
 }
 
-Padding partFour(LoginState state) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          padding: const EdgeInsets.all(8.0),
-          shrinkWrap: true,
-          itemCount: 1, // Set the number of items to 1
-          itemBuilder: (BuildContext context, int index) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                subDescription(
-                  'Keterlambatan',
-                  state.user?.KETERLAMBATAN_INSTRUKTUR,
-                  Icons.class_,
-                ),
-                // Add more subDescription widgets here as needed
-              ],
-            );
-          },
-        ),
-      ),
-    ),
-  );
-}
-
-Widget subDescription(String textTitle, textDescription, IconData ic) {
+Widget subDescription(String textTitle, dynamic textDescription, IconData ic) {
   return Center(
     child: Column(
       children: [
@@ -216,19 +187,45 @@ Widget subDescription(String textTitle, textDescription, IconData ic) {
             ],
           ),
         ),
-        if (textDescription !=
-            null) // Tambahkan penanganan jika textDescription tidak null
+        if (textDescription != null)
           Text(
-            textDescription,
+            timeFormatHourMinute(int.tryParse(textDescription) ?? 0),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-        if (textDescription ==
-            null) // Tambahkan penanganan jika textDescription null
+        if (textDescription == null)
           Text(
             'No description available',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
       ],
+    ),
+  );
+}
+
+Padding partFour(LoginState state) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(8.0),
+          shrinkWrap: true,
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                subDescription(
+                  'Keterlambatan',
+                  state.user?.KETERLAMBATAN_INSTRUKTUR,
+                  Icons.class_,
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     ),
   );
 }

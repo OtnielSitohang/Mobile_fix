@@ -14,6 +14,7 @@ class AuthRepository {
   Future<User?> login(
       {required String EMAIL_USER, required String PASSWORD_USER}) async {
     String apiURL = '$url/loginMobile2';
+    print(apiURL);
     try {
       var apiResult = await http.post(
         Uri.parse(apiURL),
