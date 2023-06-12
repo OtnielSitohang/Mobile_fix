@@ -41,7 +41,7 @@ class HistoryKelasPageState extends State<HistoryKelasPage> {
 
   Future<void> fetchHistoryData() async {
     String apiUrl = '$url/indexHistoryMemberKelas/$loggedInUserID';
-    inspect(loggedInUserID);
+    // inspect(loggedInUserID);
     try {
       var response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {

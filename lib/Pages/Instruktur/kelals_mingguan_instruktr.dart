@@ -9,14 +9,15 @@ import 'package:http/http.dart' as http;
 import '../../Bloc/login/login_bloc.dart';
 import '../../Config/global.dart';
 
-class IndexInstruktur extends StatefulWidget {
-  const IndexInstruktur({Key? key}) : super(key: key);
+class KelasMingguanInstruktur extends StatefulWidget {
+  const KelasMingguanInstruktur({Key? key}) : super(key: key);
 
   @override
-  State<IndexInstruktur> createState() => _IndexInstrukturState();
+  State<KelasMingguanInstruktur> createState() =>
+      _KelasMingguanInstrukturState();
 }
 
-class _IndexInstrukturState extends State<IndexInstruktur> {
+class _KelasMingguanInstrukturState extends State<KelasMingguanInstruktur> {
   static String get baseUrl => url;
   static const String apiEndpoint = '/ijininstruktur/create';
   TextEditingController keteranganController = TextEditingController();
@@ -167,8 +168,12 @@ class _IndexInstrukturState extends State<IndexInstruktur> {
                           var history = historyData[index];
                           var SESI_JADWAL = history['SESI_JADWAL'];
                           var NAMA_KELAS = history['NAMA_KELAS'];
+                          var SLOT_KELAS = 10 - history['SLOT_KELAS'];
                           var ID_JADWAL = history['ID_JADWAL'];
-                          var KAPASITAS_KELAS = history['KAPASITAS_KELAS'];
+                          var bookings = history['kelas']?['BOOKINGS'] as List<
+                              dynamic>?; // Assuming the bookings are stored in a list
+                          var bookingCount = bookings?.length ?? 0;
+
                           var HARI_JADWAL_HARIAN =
                               history['HARI_JADWAL_HARIAN'];
                           var TANGGAL_JADWAL_HARIAN =
@@ -257,7 +262,8 @@ class _IndexInstrukturState extends State<IndexInstruktur> {
                                         ),
                                         SizedBox(height: 8),
                                         Text(
-                                          KAPASITAS_KELAS.toString() + ' Orang',
+                                          SLOT_KELAS.toString() +
+                                              ' Orang yang melakukan booking',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: fontSize,
@@ -502,7 +508,7 @@ String getInstrukturPenggantiText(dynamic history) {
   if (idInstrukturPengganti != null && idInstrukturPengganti.isNotEmpty) {
     return 'Instruktur Pengganti: $idInstrukturPengganti';
   } else {
-    return 'Kelas Oleh Instruktur Biasa';
+    return 'Tidak ada perubahan instruktur';
   }
 }
 

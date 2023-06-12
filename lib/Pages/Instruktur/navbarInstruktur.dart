@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gofid_mobile_fix/Pages/Instruktur/history_instruktur.dart';
-import 'package:gofid_mobile_fix/Pages/Instruktur/indexInstruktur.dart';
+import 'package:gofid_mobile_fix/Pages/Instruktur/kelals_mingguan_instruktr.dart';
 import 'package:gofid_mobile_fix/Pages/Instruktur/profileInstruktur.dart';
 import 'package:sidebarx/sidebarx.dart';
+
+import 'kelas_today.dart';
 
 class HomeInstruktur extends StatefulWidget {
   const HomeInstruktur({super.key});
@@ -26,8 +28,12 @@ class _HomeInstrukturState extends State<HomeInstruktur> {
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
+            icon: Icon(Icons.today),
+            label: 'Kelas Hari ini',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.explore),
-            label: 'Kelas',
+            label: 'Kelas Mingguan',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.history),
@@ -41,7 +47,8 @@ class _HomeInstrukturState extends State<HomeInstruktur> {
         ],
       ),
       body: <Widget>[
-        IndexInstruktur(),
+        KelasHariIni(),
+        KelasMingguanInstruktur(),
         HistoryInstruktur(),
         ProfileInstruktur(),
         Container(

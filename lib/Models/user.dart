@@ -3,6 +3,7 @@
 // import 'mo';
 
 import 'package:gofid_mobile_fix/Models/kelas.dart';
+import 'dart:developer';
 
 class User {
   final String ID_USER;
@@ -79,7 +80,7 @@ class User {
       SISA_DEPOSIT_MEMBER: json['SISA_DEPOSIT_MEMBER']?.toString(),
       TANGGAL_KADALUARSA_MEMBERSHIP:
           json['TANGGAL_KADALUARSA_MEMBERSHIP']?.toString(),
-      kelas: Kelas.fromJson(json['kelas']),
+      kelas: (json['kelas'] != null) ? Kelas.fromJson(json['kelas']) : null,
 
       //Instruktur
       ID_INSTRUKTUR: json['ID_INSTRUKTUR']?.toString(),

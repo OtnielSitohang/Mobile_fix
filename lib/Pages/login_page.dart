@@ -168,7 +168,8 @@ class LoginButton extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, loginState) {
         if (loginState.formStatus is SubmissionSuccess) {
-          // inspect(loginState);
+          // inspect(loginState.user);
+          print('data');
           if (loginState.user != null) {
             if (loginState.user?.ID_MEMBER != null) {
               Navigator.pushReplacementNamed(context, '/homeMember');
@@ -208,61 +209,3 @@ class LoginButton extends StatelessWidget {
     );
   }
 }
-
-
-
-
-// * Button Login Code Awal
-// class LoginButton extends StatelessWidget {
-//   const LoginButton({Key? key, required this.formkey});
-
-//   final GlobalKey<FormState> formkey;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocListener<LoginBloc, LoginState>(
-//       listener: (context, loginState) {
-//         if (loginState.formStatus is SubmissionSuccess) {
-//           context.read<AppBloc>().add(SaveUserInfo(
-//                 user: loginState.user,
-//                 instruktur: loginState.instruktur,
-//                 member: loginState.member,
-//               ));
-
-//           if (loginState.user?.ID_MEMBER != null) {
-//             Navigator.pushReplacementNamed(context, '/homeMember');
-//           } else if (loginState.user?.ID_PEGAWAI != null) {
-//             Navigator.pushReplacementNamed(context, '/homePegawai');
-//           } else if (loginState.user?.ID_INSTRUKTUR != null) {
-//             Navigator.pushReplacementNamed(context, '/homeInstruktur');
-//           }
-//         }
-//       },
-//       child: BlocBuilder<LoginBloc, LoginState>(
-//         builder: (context, state) {
-//           return state.formStatus is FormSubmitting
-//               ? const Center(
-//                   child: Padding(
-//                     padding: EdgeInsets.only(top: 20),
-//                     child: CircularProgressIndicator(),
-//                   ),
-//                 )
-//               : Padding(
-//                   padding: const EdgeInsets.fromLTRB(0, 20, 5, 0),
-//                   child: SizedBox(
-//                     width: double.infinity,
-//                     child: ElevatedButton(
-//                       onPressed: () {
-//                         if (formkey.currentState!.validate()) {
-//                           context.read<LoginBloc>().add(LoginSubmitted());
-//                         }
-//                       },
-//                       child: const Text('Login'),
-//                     ),
-//                   ),
-//                 );
-//         },
-//       ),
-//     );
-//   }
-// }

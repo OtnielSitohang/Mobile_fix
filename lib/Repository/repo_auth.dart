@@ -22,12 +22,13 @@ class AuthRepository {
       );
       if (apiResult.statusCode == 200) {
         var jsonObject = json.decode(apiResult.body);
-        inspect(jsonObject);
+        inspect(jsonObject['data']);
         return User.fromJson(jsonObject['data']);
       } else if (apiResult.statusCode == 400) {
         var jsonObject = json.decode(apiResult.body);
       }
     } catch (e) {
+      inspect(e);
       return null;
     }
   }

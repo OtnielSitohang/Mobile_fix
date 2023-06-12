@@ -3,7 +3,7 @@ import 'package:gofid_mobile_fix/Models/member.dart';
 import 'package:gofid_mobile_fix/Models/sesi_gym.dart';
 import 'package:gofid_mobile_fix/Models/user.dart';
 
-class BookingGym {
+class BookingKelas {
   final String? ID_BOOKING_KELAS;
   final String? ID_JADWAL;
   final String? ID_USER;
@@ -17,7 +17,7 @@ class BookingGym {
   User user;
   Member member;
 
-  BookingGym({
+  BookingKelas({
     required this.ID_BOOKING_KELAS,
     this.ID_JADWAL,
     this.ID_USER,
@@ -33,8 +33,8 @@ class BookingGym {
     required this.member,
   });
 
-  factory BookingGym.fromJson(Map<String, dynamic> json) {
-    return BookingGym(
+  factory BookingKelas.fromJson(Map<String, dynamic> json) {
+    return BookingKelas(
       ID_BOOKING_KELAS: json['ID_BOOKING_KELAS'].toString(),
       ID_JADWAL: json['ID_JADWAL'].toString(),
       ID_USER: json['ID_USER'].toString(),

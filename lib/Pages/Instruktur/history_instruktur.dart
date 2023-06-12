@@ -16,6 +16,7 @@ class HistoryInstruktur extends StatefulWidget {
 
 class _HistoryInstrukturState extends State<HistoryInstruktur> {
   List<dynamic> historyData = [];
+  List<dynamic> historyIzin = [];
   late String loggedInUserID;
 
   @override
@@ -37,10 +38,10 @@ class _HistoryInstrukturState extends State<HistoryInstruktur> {
       var response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
-        if (jsonData['jadwal'] != null) {
+        if (jsonData['data'] != null || jsonData['instruktur'] != null) {
           setState(() {
-            historyData = List.from(jsonData['jadwal']);
-            // inspect(historyData);
+            historyData = List.from(jsonData['data']);
+            historyIzin = List.from(jsonData['instruktur']);
           });
         }
       } else {
@@ -59,119 +60,223 @@ class _HistoryInstrukturState extends State<HistoryInstruktur> {
         automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
-        itemCount: historyData.length,
+        itemCount: historyData.length + historyIzin.length + 2,
         itemBuilder: (context, index) {
-          var history = historyData[index];
-          var ID_JADWAL = history['ID_JADWAL'];
-          var NAMA_KELAS = history['kelas']['NAMA_KELAS'];
-          NumberFormat currencyFormat =
-              NumberFormat.currency(locale: 'id_ID', symbol: 'Rp. ');
-          String formattedPrice =
-              currencyFormat.format(history['kelas']['HARGA_KELAS']);
-          var KAPASITAS_KELAS = history['kelas']?['KAPASITAS_KELAS'] ?? 0;
-
-          var HARI_JADWAL_HARIAN =
-              history['jadwal_harian']?['HARI_JADWAL_HARIAN'] ?? 0;
-
-          var TANGGAL_JADWAL_HARIAN =
-              history['jadwal_harian']?['TANGGAL_JADWAL_HARIAN'] ?? 'null';
-          var STATUS = history['jadwal_harian']?['STATUS'] ?? 0;
-          var SESI_JADWAL = history['SESI_JADWAL'];
-          var JAD_ID_JADWAL = history['JAD_ID_JADWAL'];
-
-          return Card(
-            elevation: 4,
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade200, Colors.blue.shade400],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+          if (index == 0) {
+            // Section title: History Kelas
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                'History Kelas',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final screenWidth = constraints.maxWidth;
-                  final cardWidth = screenWidth * 0.9;
-                  final fontSize = screenWidth * 0.04;
+            );
+          } else if (index <= historyData.length) {
+            if (historyData.isEmpty) {
+              // Section title: History Kelas (empty)
+              return Container(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'History Data Kosong',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            } else {
+              var history = historyData[index - 1];
+              var NAMA_KELAS = history['NAMA_KELAS'];
+              NumberFormat currencyFormat =
+                  NumberFormat.currency(locale: 'id_ID', symbol: 'Rp. ');
+              String formattedPrice =
+                  currencyFormat.format(history['HARGA_KELAS']);
 
-                  return Container(
-                    width: cardWidth,
-                    padding: EdgeInsets.all(screenWidth * 0.04),
+              var HARI_JADWAL_HARIAN = history['HARI_JADWAL_HARIAN'];
+              var TANGGAL_JADWAL_HARIAN = history['TANGGAL_JADWAL_HARIAN'];
+              var SESI_JADWAL = history['SESI_JADWAL'];
+              var SLOT_KELAS = history['SLOT_KELAS'];
+
+              return Card(
+                elevation: 4,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                      colors: [Colors.blue.shade200, Colors.blue.shade400],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final screenWidth = constraints.maxWidth;
+                      final cardWidth = screenWidth * 0.9;
+                      final fontSize = screenWidth * 0.04;
+
+                      return Container(
+                        width: cardWidth,
+                        padding: EdgeInsets.all(screenWidth * 0.04),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Kelas $NAMA_KELAS',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Pada Hari ${GetHariJadwalhariaj(HARI_JADWAL_HARIAN)}',
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              TANGGAL_JADWAL_HARIAN.toString(),
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              GetSesiTetx(SESI_JADWAL),
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              formattedPrice,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: fontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              SLOT_KELAS.toString() + ' Orang',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: fontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            }
+          } else if (index == historyData.length + 1) {
+            // Section title: History Izin
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                'History Izin',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
+          } else if (index <= historyData.length + historyIzin.length + 1) {
+            if (historyIzin.isEmpty) {
+              // Section title: History Izin (empty)
+              return Container(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'History Izin Kosong',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            } else {
+              var instruktur = historyIzin[index - historyData.length - 2];
+              return Card(
+                elevation: 4,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                      colors: [Colors.blue.shade200, Colors.blue.shade400],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '#$ID_JADWAL',
+                          'ID Izin ${instruktur['ID_IJIN_INSTRUKTUR']}',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: fontSize,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          NAMA_KELAS,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: fontSize,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
-                          GetSesiTetx(SESI_JADWAL),
+                          'Kelas ${instruktur['NAMA_KELAS']} digantikan Oleh ${instruktur['instruktur_pengganti_user_name']['NAMA_USER']}',
                           style: TextStyle(
-                            fontSize: 18,
                             color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
-                          GetHariJadwalhariaj(HARI_JADWAL_HARIAN),
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: screenWidth * 0.02),
-                        Text(
-                          getPresensiText(STATUS),
+                          'Pada ${instruktur['TANGGAL_IZIN']}',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: fontSize,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: screenWidth * 0.02),
+                        SizedBox(height: 8),
                         Text(
-                          formattedPrice,
+                          'Diajukan Pada ${instruktur['TANGGAL_PENGAJUAN_IZIN']}',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: fontSize,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: screenWidth * 0.02),
-                        // Text(
-                        //   KAPASITAS_KELAS.toString() + ' Orang',
-                        //   style: TextStyle(
-                        //     color: Colors.white,
-                        //     fontSize: fontSize,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
                       ],
                     ),
-                  );
-                },
-              ),
-            ),
-          );
+                  ),
+                ),
+              );
+            }
+          }
         },
       ),
     );
